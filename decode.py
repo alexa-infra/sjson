@@ -24,9 +24,47 @@ def _SkipWhitespace(text, index):
         if _IsWhitespace (c):
             index += 1
             continue
-        break
-    
+        elif c == '/':
+            index = _SkipComment(text, index+1)
+            continue
+        break    
     return index
+
+def _SkipRestOfLine(text, index):
+    prevc = index == 0 and '\0' or text[index-1]
+    while True:
+        if index >= len(text):
+            return -1
+        c = text[index]
+        index += 1
+        if c == '\n':
+            break
+        if prevc == '\r' and c == '\n':
+            break
+        prevc = c
+    return index
+
+def _SkipToEndOfComment(text, index):
+    prevc = index == 0 and '\0' or text[index-1]
+    while True:
+        if index >= len(text):
+            return -1
+        c = text[index]
+        index += 1
+        if prevc == '*' and c == '/':
+            break
+        prevc = c
+    return index
+
+def _SkipComment(text, index):
+    if index >= len(text):
+        return -1
+    c = text[index]
+    assert c == '/' or c == '*', "Wrong syntax of comment '{0}'".format(c)
+    if c == '/':
+        return _SkipRestOfLine(text, index+1)
+    elif c == '*':
+        return _SkipToEndOfComment(text, index+1)
 
 def _IsIdentifier(c):
     import string
