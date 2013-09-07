@@ -4,7 +4,7 @@
 
 def _Consume(text, index, what):
     index = _SkipWhitespace (text, index)
-    assert text[index:index+len(what)] == what, "Expected to read '{}' but read '{}' instead".format(what, text[index:index+len(what)])
+    assert text[index:index+len(what)] == what, "Expected to read '{0}' but read '{1}' instead".format(what, text[index:index+len(what)])
     return index + len(what)
 
 def _ParseIdentifier(text, index):
@@ -101,8 +101,7 @@ def _ParseNumber (text, index):
         return (index, float(value))
     
 def _ParseMap (text, index):
-    from collections import OrderedDict
-    result = OrderedDict()
+    result = {}
     
     while True:
         index = _SkipWhitespace (text, index)

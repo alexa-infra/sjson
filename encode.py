@@ -10,7 +10,8 @@ def dumps(o, indent=None):
 
 def _encode(l, separators=(', ', '\n', ' = '), indent=0, level=0):
     if isinstance (l, str):
-        yield '"{}"'.format (str(l))
+        s = str(l)
+        yield len(s) == 0 and '""' or '"{0}"'.format(s)
     elif l is None:
         yield 'null'
     elif l is True:
